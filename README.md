@@ -1,16 +1,115 @@
-# React + Vite
+# 🤖 DigiPlus — AI Service Desk
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DigiPlus is an AI-powered IT Service Desk application designed to help organizations manage IT support incidents efficiently.
 
-Currently, two official plugins are available:
+The system allows users to create and manage support tickets, track ticket status and priority, and use AI-powered analysis to understand the possible cause of an incident and receive suggested troubleshooting actions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🎫 Ticket Management
+- Create new IT support tickets
+- Automatically generate unique incident IDs
+- View all submitted tickets
+- Search tickets
+- Track ticket category and priority
+- Track ticket status
+- View complete ticket details
 
-## Expanding the ESLint configuration
+### 🤖 AI-Powered Ticket Analysis
+DigiPlus integrates an AI service to analyze support tickets.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+For each selected ticket, the AI analyzes:
+
+- Ticket title
+- Ticket description
+- Category
+- Priority
+
+It generates:
+
+- **AI Summary**
+- **Possible Cause**
+- **Suggested Troubleshooting Actions**
+
+The generated analysis is stored in MongoDB and displayed directly inside the ticket details modal.
+
+### 📊 Dashboard
+The dashboard provides an overview of the service desk, including:
+
+- Total tickets
+- Open incidents
+- High-priority incidents
+- Resolved incidents
+- Recent tickets
+- Ticket activity
+
+### 🎨 Modern UI
+- Responsive React interface
+- Tailwind CSS styling
+- Lucide icons
+- Modal-based ticket interaction
+- Responsive layout for desktop and smaller screens
+
+---
+
+# 🏗️ System Architecture
+
+```text
+                         ┌───────────────────────────┐
+                         │        USER / AGENT        │
+                         │                           │
+                         │  Create / View / Analyze  │
+                         │          Tickets          │
+                         └─────────────┬─────────────┘
+                                       │
+                                       │ HTTP Requests
+                                       ▼
+                         ┌───────────────────────────┐
+                         │       REACT FRONTEND      │
+                         │                           │
+                         │  • Dashboard              │
+                         │  • Tickets                │
+                         │  • Search                 │
+                         │  • Ticket Modal           │
+                         │  • AI Analysis UI         │
+                         └─────────────┬─────────────┘
+                                       │
+                                       │ REST API
+                                       ▼
+                         ┌───────────────────────────┐
+                         │      NODE.JS + EXPRESS    │
+                         │          BACKEND          │
+                         │                           │
+                         │  • Ticket Routes          │
+                         │  • Validation             │
+                         │  • Ticket Processing      │
+                         │  • AI Service Integration │
+                         └──────────┬───────┬────────┘
+                                    │       │
+                       Database     │       │ AI Request
+                       Operations   │       │
+                                    ▼       ▼
+                         ┌──────────────┐  ┌─────────────────┐
+                         │   MongoDB    │  │   GROQ AI API   │
+                         │              │  │                 │
+                         │ • Tickets    │  │ • Analysis      │
+                         │ • Status     │  │ • Summary       │
+                         │ • Priority   │  │ • Cause         │
+                         │ • AI Result  │  │ • Actions       │
+                         └──────────────┘  └─────────────────┘
+                                    ▲
+                                    │
+                                    │ AI Analysis
+                                    │ stored with ticket
+                                    │
+                         ┌──────────┴──────────┐
+                         │     MongoDB Ticket  │
+                         │      Document       │
+                         │                     │
+                         │ aiAnalysis:         │
+                         │  ├─ summary         │
+                         │  ├─ possibleCause   │
+                         │  └─ actions[]       │
+                         └─────────────────────┘
